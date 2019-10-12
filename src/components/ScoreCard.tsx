@@ -199,6 +199,10 @@ class ScoreCard extends React.Component<{}, ScoreCardProps> {
             {this.drawScoreCard(this.state.lowerScoreCard)}
           </tbody>
         </Table>
+        <small>
+          Yahtzee is a registered trademark of{" "}
+          <a href="http://www.hasbro.com">Hasbro</a>
+        </small>
       </Container>
     );
   }
