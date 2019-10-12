@@ -7,13 +7,15 @@ import Table from "react-bootstrap/Table";
 
 interface DiceRollState {
   currentRoll: Array<number>;
+  selectedDice: Array<number>;
 }
 
 class DiceRoll extends React.Component<{}, DiceRollState> {
   constructor(props: DiceRollState) {
     super(props);
     this.state = {
-      currentRoll: []
+      currentRoll: [1, 2, 3, 4, 5],
+      selectedDice: []
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -26,8 +28,10 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
     });
   };
 
-  selectDie = () => {
-    this.setState({});
+  selectDie = (e: number) => {
+    this.setState({
+      selectedDice: this.state.selectedDice.concat([e])
+    });
   };
 
   rollDice() {
@@ -38,7 +42,7 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
     return newRoll;
   }
 
-  render() {
+  getDie(die: number) {
     const dice: Array<string> = [
       "",
       "fas fa-dice-one fa-5x",
@@ -48,34 +52,40 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
       "fas fa-dice-five fa-5x",
       "fas fa-dice-six fa-5x"
     ];
+    return dice[die];
+  }
 
+  getDice() {
+    return this.state.currentRoll.map(die => {
+      return (
+        <td>
+          <Button variant="light">
+            <i className={this.getDie(die)}> </i>
+          </Button>
+        </td>
+      );
+    });
+  }
+
+  render() {
     return (
       <Navbar fixed="bottom">
         <Container>
           <Table borderless>
             <tr>
               <td>
-                <Button onClick={this.handleClick}>Roll Dice</Button>
-                <br />
-                Click dice you want to keep
+                <Container>
+                  <Button onClick={this.handleClick} size="lg">
+                    Roll Dice
+                  </Button>
+                  <p>
+                    <small>Click dice you want to keep</small>
+                  </p>
+                </Container>
               </td>
-              <td>&nbsp;</td>
-              <td>
-                <i className={dice[this.state.currentRoll[0]]}> </i>
-              </td>
-              <td>
-                <i className={dice[this.state.currentRoll[1]]}> </i>
-              </td>
-              <td>
-                <i className={dice[this.state.currentRoll[2]]}> </i>
-              </td>
-              <td>
-                <i className={dice[this.state.currentRoll[3]]}> </i>
-              </td>
-              <td>
-                <i className={dice[this.state.currentRoll[4]]}> </i>
-              </td>
-              <td>&nbsp;</td>
+              <td> </td>
+              {this.getDice()}
+              <td> </td>
             </tr>
           </Table>
         </Container>

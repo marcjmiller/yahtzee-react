@@ -5,8 +5,18 @@ import Container from "react-bootstrap/Container";
 
 interface ScoreCardProps {
   tableHeadings: Array<string>;
-  upperScoreCard: Array<{ label: string; guide: string; game: number }>;
-  lowerScoreCard: Array<{ label: string; guide: string; game: number }>;
+  upperScoreCard: Array<{
+    label: string;
+    guide: string;
+    player1Score: number;
+    player2Score: number;
+  }>;
+  lowerScoreCard: Array<{
+    label: string;
+    guide: string;
+    player1Score: number;
+    player2Score: number;
+  }>;
 }
 
 class ScoreCard extends React.Component<{}, ScoreCardProps> {
@@ -14,39 +24,125 @@ class ScoreCard extends React.Component<{}, ScoreCardProps> {
     super(props);
 
     this.state = {
-      tableHeadings: [
-        "Upper Section",
-        "How to Score",
-        "Game #1",
-        "Game #2",
-        "Game #3",
-        "Game #4",
-        "Game #5",
-        "Game #6"
-      ],
+      tableHeadings: ["Upper Section", "How to Score", "Player 1", "Player 2"],
       upperScoreCard: [
-        { label: "Aces", guide: "Count and add only Aces", game: -1 },
-        { label: "Twos", guide: "Count and add only Twos", game: -1 },
-        { label: "Threes", guide: "Count and add only Threes", game: -1 },
-        { label: "Fours", guide: "Count and add only Fours", game: -1 },
-        { label: "Fives", guide: "Count and add only Fives", game: -1 },
-        { label: "Sixes", guide: "Count and add only Sixes", game: -1 },
-        { label: "Total Score", guide: "==>", game: -1 },
-        { label: "Bonus", guide: "Score 35", game: -1 },
-        { label: "Total", guide: "==>", game: -1 }
+        {
+          label: "Aces",
+          guide: "Count and add only Aces",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Twos",
+          guide: "Count and add only Twos",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Threes",
+          guide: "Count and add only Threes",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Fours",
+          guide: "Count and add only Fours",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Fives",
+          guide: "Count and add only Fives",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Sixes",
+          guide: "Count and add only Sixes",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Total Score",
+          guide: "==>",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Bonus",
+          guide: "Score 35",
+          player1Score: -1,
+          player2Score: -1
+        },
+        { label: "Total", guide: "==>", player1Score: -1, player2Score: -1 }
       ],
       lowerScoreCard: [
-        { label: "3 of a kind", guide: "Score total of all dice", game: -1 },
-        { label: "4 of a kind", guide: "Score total of all dice", game: -1 },
-        { label: "Full House", guide: "Score 25", game: -1 },
-        { label: "Sm Straight", guide: "Score 30", game: -1 },
-        { label: "Lg Straight", guide: "Score 40", game: -1 },
-        { label: "Yahtzee", guide: "Score 50", game: -1 },
-        { label: "Chance", guide: "Score total of all dice", game: -1 },
-        { label: "Bonus Yahtzee", guide: "Score 100 each", game: -1 },
-        { label: "Upper Total", guide: "==>", game: -1 },
-        { label: "Lower Total", guide: "==>", game: -1 },
-        { label: "Grand Total", guide: "==>", game: -1 }
+        {
+          label: "3 of a kind",
+          guide: "Score total of all dice",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "4 of a kind",
+          guide: "Score total of all dice",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Full House",
+          guide: "Score 25",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Sm Straight",
+          guide: "Score 30",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Lg Straight",
+          guide: "Score 40",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Yahtzee",
+          guide: "Score 50",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Chance",
+          guide: "Score total of all dice",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Bonus Yahtzee",
+          guide: "Score 100 each",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Upper Total",
+          guide: "==>",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Lower Total",
+          guide: "==>",
+          player1Score: -1,
+          player2Score: -1
+        },
+        {
+          label: "Grand Total",
+          guide: "==>",
+          player1Score: -1,
+          player2Score: -1
+        }
       ]
     };
   }
@@ -61,9 +157,16 @@ class ScoreCard extends React.Component<{}, ScoreCardProps> {
     });
   }
 
-  drawScoreCard(section: { label: string; guide: string; game: number }[]) {
+  drawScoreCard(
+    section: {
+      label: string;
+      guide: string;
+      player1Score: number;
+      player2Score: number;
+    }[]
+  ) {
     return section.map(row => {
-      const { label, guide, game } = row;
+      const { label, guide, player1Score, player2Score } = row;
       return (
         <tr>
           <td>
@@ -72,12 +175,8 @@ class ScoreCard extends React.Component<{}, ScoreCardProps> {
           <td>
             <small>{guide}</small>
           </td>
-          <td>{game !== -1 ? game : ""}</td>
-          <td>{game !== -1 ? game : ""}</td>
-          <td>{game !== -1 ? game : ""}</td>
-          <td>{game !== -1 ? game : ""}</td>
-          <td>{game !== -1 ? game : ""}</td>
-          <td>{game !== -1 ? game : ""}</td>
+          <td>{player1Score !== -1 ? player1Score : ""}</td>
+          <td>{player2Score !== -1 ? player2Score : ""}</td>
         </tr>
       );
     });
