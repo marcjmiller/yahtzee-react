@@ -23,8 +23,7 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
     };
 
     this.handleClick = this.handleClick.bind(this);
-    this.deSelectDie = this.deSelectDie.bind(this);
-    this.selectDie = this.selectDie.bind(this);
+    this.handleSelectDie = this.handleSelectDie.bind(this);
   }
 
   handleClick = () => {
@@ -33,17 +32,13 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
     });
   };
 
-  deSelectDie = (die: React.FormEvent<HTMLButtonElement>) => {
+  handleSelectDie = (die: React.FormEvent<HTMLButtonElement>) => {
     let dice = this.state.selectedDice;
-    dice.delete(Number(die.currentTarget.value));
-    this.setState({
-      selectedDice: dice
-    });
-  };
-
-  selectDie = (die: React.FormEvent<HTMLButtonElement>) => {
-    let dice = this.state.selectedDice;
-    dice.add(Number(die.currentTarget.value));
+    if (dice.has(Number(die.currentTarget.value))) {
+      dice.delete(Number(die.currentTarget.value));
+    } else {
+      dice.add(Number(die.currentTarget.value));
+    }
     this.setState({
       selectedDice: dice
     });
@@ -90,15 +85,11 @@ class DiceRoll extends React.Component<{}, DiceRollState> {
   getDice() {
     return this.state.currentRoll.map((die: number, index: number) => {
       return (
-        <td>
+        <td key={index}>
           <Button
             variant="light"
             value={index}
-            onClick={
-              this.state.selectedDice.has(index)
-                ? this.deSelectDie
-                : this.selectDie
-            }
+            onClick={this.handleSelectDie}
             disabled={
               this.state.currentPlayerRoll === 3 ||
               this.state.currentPlayerRoll === 0
