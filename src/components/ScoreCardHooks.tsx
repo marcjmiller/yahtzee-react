@@ -11,7 +11,9 @@ type scoreCardSection = {
   player2Score: number;
 };
 
-type selectedDiceType = Set<number>;
+type currentRollType = {
+  [index: number]: { rollValue: number; isSelected: boolean };
+};
 
 export const ScoreCard = () => {
   const tableHeadings = [
@@ -145,31 +147,55 @@ export const ScoreCard = () => {
     }
   ];
 
-  const [currentRoll, setCurrentRoll] = useState([1, 2, 3, 4, 5]);
-  const handleCurrentRoll = (roll: Array<number>) => {
-    setCurrentRoll(roll);
-    handleSetCurrentPlayerRoll();
-    handleSetCurrentPlayer();
+  const initialRoll: currentRollType = {
+    1: { rollValue: 1, isSelected: false },
+    2: { rollValue: 2, isSelected: false },
+    3: { rollValue: 3, isSelected: false },
+    4: { rollValue: 4, isSelected: false },
+    5: { rollValue: 5, isSelected: false }
   };
 
-  const [selectedDice, setSelectedDice] = useState<selectedDiceType>(
-    new Set<number>([])
-  );
+  const [currentRoll, setCurrentRoll] = useState(initialRoll);
 
-  const handleSelectDie = (die: React.FormEvent<HTMLButtonElement>) => {
-    const dice = selectedDice;
-    if (dice.has(Number(die.currentTarget.value))) {
-      dice.delete(Number(die.currentTarget.value));
-    } else {
-      dice.add(Number(die.currentTarget.value));
+  const handleRollDice = () => {
+    if (currentPlayerRoll === 3) {
+      resetSelectedDice();
     }
-    setSelectedDice({ dice });
+    let newRoll: currentRollType = currentRoll;
+    for (let i = 1; i <= 5; i++) {
+      if (!newRoll[i].isSelected) {
+        newRoll[i].rollValue = Math.floor(Math.random() * Math.floor(5)) + 1;
+      }
+    }
+    setCurrentRoll(newRoll);
+    setCurrentPlayerRoll(currentPlayerRoll + 1);
+    if (currentPlayerRoll === 3) {
+      handleSetCurrentPlayer();
+      handleSetCurrentPlayerRoll();
+    }
+  };
+
+  const handleSelectDie = (die: number) => {
+    const newSelect:boolean = !currentRoll[die].isSelected;
+    setCurrentRoll({
+      ...currentRoll,
+      [die]: { rollValue: currentRoll[die].rollValue, isSelected: newSelect }
+    });
+  };
+
+  const resetSelectedDice = () => {
+    const newRoll = currentRoll;
+    [1,2,3,4,5].map((i: number) => {
+      newRoll[i].isSelected = false;
+    });
+    setCurrentRoll(newRoll);
   };
 
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const handleSetCurrentPlayer = () => {
     const player = currentPlayer === 1 ? 2 : 1;
     setCurrentPlayer(player);
+    setCurrentPlayerRoll(1);
   };
 
   const [currentPlayerRoll, setCurrentPlayerRoll] = useState(0);
@@ -178,7 +204,7 @@ export const ScoreCard = () => {
     setCurrentPlayerRoll(roll);
   };
 
-  function drawHeadings() {
+  const drawHeadings = () => {
     return tableHeadings.map(heading => {
       return (
         <td key={heading}>
@@ -186,9 +212,9 @@ export const ScoreCard = () => {
         </td>
       );
     });
-  }
+  };
 
-  function drawScoreCard(section: scoreCardSection[]) {
+  const drawScoreCard = (section: scoreCardSection[]) => {
     return section.map(row => {
       const { label, guide, player1Score, player2Score } = row;
       return (
@@ -204,7 +230,7 @@ export const ScoreCard = () => {
         </tr>
       );
     });
-  }
+  };
 
   return (
     <Container>
@@ -228,8 +254,7 @@ export const ScoreCard = () => {
       </small>
       <DiceRoll
         currentRoll={currentRoll}
-        handleCurrentRoll={handleCurrentRoll}
-        selectedDice={selectedDice}
+        handleRollDice={handleRollDice}
         handleSelectDie={handleSelectDie}
         currentPlayer={currentPlayer}
         currentPlayerRoll={currentPlayerRoll}

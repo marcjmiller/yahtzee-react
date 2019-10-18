@@ -5,30 +5,19 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 
+type currentRollType = {
+  [index: number]: { rollValue: number; isSelected: boolean };
+};
+
 interface DiceRollState {
-  currentRoll: Array<number>;
-  handleCurrentRoll: Function;
-  selectedDice: Set<number>;
+  currentRoll: currentRollType;
+  handleRollDice: Function;
   handleSelectDie: Function;
   currentPlayer: number;
   currentPlayerRoll: number;
 }
 
 const DiceRoll = (props: DiceRollState) => {
-  const rollDice = () => {
-    let newRoll: Array<number> = [];
-    for (let i = 0; i < 5; i++) {
-      if (!props.selectedDice.has(i)) {
-        newRoll = newRoll.concat([
-          Math.floor(Math.random() * Math.floor(5)) + 1
-        ]);
-      } else {
-        newRoll = newRoll.concat([props.currentRoll[i]]);
-      }
-    }
-    return newRoll;
-  };
-
   const getDie = (die: number) => {
     const dice: Array<string> = [
       "",
@@ -43,27 +32,25 @@ const DiceRoll = (props: DiceRollState) => {
   };
 
   const getDice = () => {
-    return props.currentRoll.map((die: number, index: number) => {
-      return (
-        <td key={index}>
-          <Button
+    return [1, 2, 3, 4, 5].map((index: number) => {
+      return <td key={index}>
+        <Button
             variant="light"
             value={index}
-            onClick={() => props.handleSelectDie}
+            onClick={() => props.handleSelectDie(index)}
             disabled={
               props.currentPlayerRoll === 3 || props.currentPlayerRoll === 0
             }
-          >
+        >
             <span
-              style={{
-                color: props.selectedDice.has(index) ? "green" : "black"
-              }}
+                style={{
+                  color: (props.currentRoll[index].isSelected) ? "green" : "black"
+                }}
             >
-              <i className={getDie(die)}> </i>
+              <i className={getDie(props.currentRoll[index].rollValue)}> </i>
             </span>
-          </Button>
-        </td>
-      );
+        </Button>
+      </td>;
     });
   };
 
@@ -83,10 +70,7 @@ const DiceRoll = (props: DiceRollState) => {
                       props.currentPlayerRoll +
                       ": "}
                   </h6>
-                  <Button
-                    onClick={() => props.handleCurrentRoll(rollDice())}
-                    size="lg"
-                  >
+                  <Button onClick={() => props.handleRollDice()} size="lg">
                     Roll Dice
                   </Button>
                   <p>
