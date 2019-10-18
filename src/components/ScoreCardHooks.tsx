@@ -5,10 +5,12 @@ import Container from "react-bootstrap/Container";
 import DiceRoll from "./DiceRollHooks";
 
 type scoreCardSection = {
-  label: string;
-  guide: string;
-  player1Score: number;
-  player2Score: number;
+  [index: string]: {
+    label: string;
+    guide: string;
+    player1Score: number;
+    player2Score: number;
+  };
 };
 
 type currentRollType = {
@@ -22,130 +24,132 @@ export const ScoreCard = () => {
     "Player 1",
     "Player 2"
   ];
-  const upperScoreCard = [
-    {
+  const upperScoreCard = {
+    "aces": {
       label: "Aces",
       guide: "Count and add only Aces",
       player1Score: -1,
       player2Score: -1
     },
-    {
+    "twos": {
       label: "Twos",
-      guide: "Count and add only Twos",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Count and add only Twos",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "threes": {
       label: "Threes",
-      guide: "Count and add only Threes",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Count and add only Threes",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "fours": {
       label: "Fours",
-      guide: "Count and add only Fours",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Count and add only Fours",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "fives": {
       label: "Fives",
-      guide: "Count and add only Fives",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Count and add only Fives",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "sixes": {
       label: "Sixes",
-      guide: "Count and add only Sixes",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Count and add only Sixes",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "total": {
       label: "Total Score",
-      guide: "==>",
-      player1Score: -1,
-      player2Score: -1
+          guide: "==>",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "bonus": {
       label: "Bonus",
-      guide: "Score 35",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 35",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "totalUpperSection": {
       label: "Total",
-      guide: "==>",
-      player1Score: -1,
-      player2Score: -1
-    }
-  ];
-  const lowerScoreCard = [
-    {
+          guide: "==>",
+        player1Score: -1,
+        player2Score: -1
+    },
+  };
+
+  const lowerScoreCard = {
+    "threeOfAKind": {
       label: "3 of a kind",
-      guide: "Score total of all dice",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score total of all dice",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "fourOfAKind": {
       label: "4 of a kind",
-      guide: "Score total of all dice",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score total of all dice",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "fullHouse": {
       label: "Full House",
-      guide: "Score 25",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 25",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "smallStraight": {
       label: "Sm Straight",
-      guide: "Score 30",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 30",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "largeStraight": {
       label: "Lg Straight",
-      guide: "Score 40",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 40",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "yahtzee": {
       label: "Yahtzee",
-      guide: "Score 50",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 50",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "chance": {
       label: "Chance",
-      guide: "Score total of all dice",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score total of all dice",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "bonusYahtzee": {
       label: "Bonus Yahtzee",
-      guide: "Score 100 each",
-      player1Score: -1,
-      player2Score: -1
+          guide: "Score 100 each",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "upperTotal": {
       label: "Upper Total",
-      guide: "==>",
-      player1Score: -1,
-      player2Score: -1
+          guide: "==>",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "lowerTotal": {
       label: "Lower Total",
-      guide: "==>",
-      player1Score: -1,
-      player2Score: -1
+          guide: "==>",
+        player1Score: -1,
+        player2Score: -1
     },
-    {
+    "grandTotal": {
       label: "Grand Total",
-      guide: "==>",
-      player1Score: -1,
-      player2Score: -1
-    }
-  ];
+          guide: "==>",
+        player1Score: -1,
+        player2Score: -1
+    },
+  };
+
 
   const initialRoll: currentRollType = {
     1: { rollValue: 1, isSelected: false },
@@ -214,8 +218,8 @@ export const ScoreCard = () => {
     });
   };
 
-  const drawScoreCard = (section: scoreCardSection[]) => {
-    return section.map(row => {
+  const drawScoreCard = (section: scoreCardSection) => {
+    return Object.values(section).map(row => {
       const { label, guide, player1Score, player2Score } = row;
       return (
         <tr key={label}>

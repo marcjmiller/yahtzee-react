@@ -55,21 +55,21 @@ const DiceRoll = (props: DiceRollState) => {
   };
 
   return (
-    <Navbar fixed="bottom">
+    <Navbar sticky="bottom">
       <Container>
         <Table borderless>
           <tbody>
             <tr>
               <td>
                 <Container>
-                  <h6>
+                  <h5>
                     Player
                     {" " +
                       props.currentPlayer +
                       ", roll " +
                       props.currentPlayerRoll +
                       ": "}
-                  </h6>
+                  </h5>
                   <Button onClick={() => props.handleRollDice()} size="lg">
                     Roll Dice
                   </Button>
