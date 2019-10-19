@@ -15,6 +15,10 @@ export type scoresType = {
   [index: string] : number
 }
 
+export type slicesType = {
+  [index: string]: number[]
+}
+
 export interface DiceRollState {
   currentRoll: currentRollType;
   handleRollDice: Function;
